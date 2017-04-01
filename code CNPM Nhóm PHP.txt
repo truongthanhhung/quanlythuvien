@@ -1,0 +1,169 @@
+
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import CONNECCSDL.connection;
+
+public class dangnhap extends JFrame implements ActionListener{
+       
+    private PreparedStatement stmt;
+    Connection con;
+    ResultSet rs;
+	
+     private JButton dangnhap,dangki;
+     private JTextField txtuser;
+     private JPasswordField txtpass;
+	 
+     private JPanel panel;
+     
+     
+     public dangnhap(String s){
+     	 super(s);
+     	 
+     	 
+     	 try{
+   		  con=connection.getConnection();
+     }catch(Exception e){
+   		  
+   	  }
+     	 
+     	 
+     	 this.add(createMain());	
+     	 setSize(400,300);
+     	 setVisible(true);
+          setLocationRelativeTo(null);
+      
+      }
+     JPanel createMain(){
+    	 
+    	 panel=new JPanel();
+  		panel.setLayout(null);
+  		panel.setBackground(Color.white);
+  
+  	
+  		
+    	 userlb=new JLabel("Username");
+    	
+		  
+    	 passlb=new JLabel("Password");
+    	
+		  
+    	 txtuser=new JTextField("");
+    	 txtpass=new JPasswordField("");
+    	
+    	 dangnhap=new JButton("Login");
+    	 dangnhap.addActionListener(this);
+    	 dangki=new JButton("Register");
+    	 dangki.addActionListener(this);
+    	 
+    	 
+   
+    	 panel.add(userlb);
+    	 panel.add(passlb);
+    	 panel.add(txtuser);
+    	 panel.add(txtpass);
+    	 panel.add(dangnhap);
+    	 panel.add(dangki);
+    	 
+    	
+    	
+    	 userlb.setBounds(100, 50, 100, 30);
+    	 passlb.setBounds(100, 100, 100, 30);
+         
+    	 txtuser.setBounds(200, 50, 150, 30);
+    	 txtpass.setBounds(200, 100, 150, 30);
+    	 
+    	 dangnhap.setBounds(90, 160, 150, 50);
+    	 dangki.setBounds(270, 160, 150, 50);
+    	 
+		return panel;
+    	 
+    	 
+    	 
+    	 
+     }
+     
+     public static void main(String[]args)  {
+	     new dangnhap("Login") ;
+  }
+	@Override
+	public void actionPerformed(ActionEvent ae) {
+		if(ae.getSource()==dangnhap){
+			String sql="Select * from DANGNHAP where name=? and password=?";
+			
+			try{
+				stmt= con.prepareStatement(sql);
+				stmt.setString(1,txtuser.getText());
+				stmt.setString(2,txtpass.getText());
+				
+				rs=stmt.executeQuery();
+				
+				if(rs.next()){
+					JOptionPane.showMessageDialog(null,"Dang nhap thanh cong");
+					
+					
+				     }
+				else{
+					JOptionPane.showMessageDialog(null,"That bai");
+				}
+				
+				
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+		
+		
+		if(ae.getSource()==dangki){
+			String sqlquery="Select * from DANGNHAP where name=? ";
+			
+			try{
+				stmt= con.prepareStatement(sqlquery);
+				stmt.setString(1,txtuser.getText());
+				
+				
+				rs=stmt.executeQuery();
+				
+				if(rs.next()){
+					JOptionPane.showMessageDialog(null,"Tai khoan da ton tai");
+					
+				     }
+				else{
+					JOptionPane.showMessageDialog(null,"Dang ki thanh cong");
+					String sql="INSERT INTO login(name,password)  VALUES (?,?)";
+					stmt=con.prepareStatement(sql);
+					stmt.setString(1,txtuser.getText());
+					stmt.setString(2,txtpass.getText());
+					stmt.executeUpdate();
+				}
+				
+				
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+	}
+}
+
