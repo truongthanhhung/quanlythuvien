@@ -1,0 +1,166 @@
+Nh?p kh?u java.awt.Color;
+Nh?p kh?u java.awt.event.ActionEvent;
+Nh?p kh?u java.awt.event.ActionListener;
+Nh?p kh?u java.sql.Connection;
+Nh?p kh?u java.sql.PreparedStatement;
+Nh?p kh?u java.sql.ResultSet;
+
+Nh?p kh?u javax.swing.ImageIcon;
+Nh?p kh?u javax.swing.JButton;
+Nh?p kh?u javax.swing.JFrame;
+Nh?p kh?u javax.swing.JLabel;
+Nh?p kh?u javax.swing.JOptionPane;
+Nh?p kh?u javax.swing.JPanel;
+Nh?p kh?u javax.swing.JPasswordField;
+Nh?p kh?u javax.swing.JTextField;
+
+Nh?p kh?u CONNECCSDL.k?t n?i;
+
+Dangnhap l?p công khai m? r?ng JFrame th?c hi?n ActionListener {
+       
+    Tý nhân PreparedStatement stmt;
+    K?t n?i con;
+    Rss ResultSet;
+	
+     Private JButton dangnhap, dangki;
+     Cá nhân JTextField txtuser;
+     Cá nhân JPasswordField txtpass;
+	 
+     B?ng JPanel tý nhân;
+     
+     
+     Dangnhap công khai (Chu?i) {
+     	 Siêu (s);
+     	 
+     	 
+     	 th?{
+   		  Con = connection.getConnection ();
+     } Catch (ngo?i l? e) {
+   		  
+   	  }
+     	 
+     	 
+     	 This.add (createMain ());	
+     	 SetSize (400.300);
+     	 SetVisible (ðúng);
+          SetLocationRelativeTo (null);
+      
+      }
+     JPanel createMain () {
+    	 
+    	 Panel = new JPanel ();
+  		Panel.setLayout (null);
+  		Panel.setBackground (Color.white);
+  
+  	
+  		
+    	 Userlb = new JLabel ("Tên ðãng nh?p");
+    	
+		  
+    	 Passlb = new JLabel ("M?t kh?u");
+    	
+		  
+    	 Txtuser = new JTextField ("");
+    	 Txtpass = new JPasswordField ("");
+    	
+    	 Dangnhap = new JButton ("Ðãng nh?p");
+    	 Dangnhap.addActionListener (này);
+    	 Dangki = new JButton ("Ðãng k?");
+    	 Dangki.addActionListener (này);
+    	 
+    	 
+   
+    	 Panel.add (userlb);
+    	 Panel.add (passlb);
+    	 Panel.add (txtuser);
+    	 Panel.add (txtpass);
+    	 Panel.add (dangnhap);
+    	 Panel.add (dangki);
+    	 
+    	
+    	
+    	 Userlb.setBounds (100, 50, 100, 30);
+    	 Passlb.setBounds (100, 100, 100, 30);
+         
+    	 Txtuser.setBounds (200, 50, 150, 30);
+    	 Txtpass.setBounds (200, 100, 150, 30);
+    	 
+    	 Dangnhap.setBounds (90, 160, 150, 50);
+    	 Dangki.setBounds (270, 160, 150, 50);
+    	 
+		B?ng tr? l?i;
+    	 
+    	 
+    	 
+    	 
+     }
+     
+     Public static void main (Chu?i [] args) {
+	     Dangnhap m?i ("Ðãng nh?p");
+  }
+	@Ghi ðè
+	Public void actionPerformed (ActionEvent ae) {
+		If (ae.getSource () == dangnhap) {
+			String sql = "Ch?n * t? DANGNHAP v?i tên =? Và m?t kh?u =?";
+			
+			th?{
+				Stmt = con.prepareStatement (sql);
+				Stmt.setString (1, txtuser.getText ());
+				Stmt.setString (2, txtpass.getText ());
+				
+				Rs = stmt.executeQuery ();
+				
+				If (rs.next ()) {
+					JOptionPane.showMessageDialog (null, "Ð?ng th? tr?n thanh cong");
+					
+					
+				     }
+				Else {
+					JOptionPane.showMessageDialog (null, "Ði?u ðó bai");
+				}
+				
+				
+			} Catch (Exception ex) {
+				Ex.printStackTrace ();
+			}
+			
+			
+		}
+		
+		
+		
+		
+		If (ae.getSource () == dangki) {
+			String sqlquery = "Ch?n * t? DANGNHAP v?i tên =?";
+			
+			th?{
+				Stmt = con.prepareStatement (sqlquery);
+				Stmt.setString (1, txtuser.getText ());
+				
+				
+				Rs = stmt.executeQuery ();
+				
+				If (rs.next ()) {
+					JOptionPane.showMessageDialog (null, "Tài khoan da ton tai");
+					
+				     }
+				Else {
+					JOptionPane.showMessageDialog (null, "Ð?ng ki thanh cong");
+					String sql = "CHÈN INTO ðãng nh?p (tên, m?t kh?u) GIÁ TR? (?,?)";
+					Stmt = con.prepareStatement (sql);
+					Stmt.setString (1, txtuser.getText ());
+					Stmt.setString (2, txtpass.getText ());
+					Stmt.executeUpdate ();
+				}
+				
+				
+			} Catch (Exception ex) {
+				Ex.printStackTrace ();
+			}
+			
+			
+		}
+		
+		
+	}
+}
